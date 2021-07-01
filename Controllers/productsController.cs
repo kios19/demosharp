@@ -23,50 +23,31 @@ namespace restsharp.Controllers
         public String Get(int id)
         {
             string cs = @"server=localhost;userid=root;password=;database=testa";
-
             using var con = new MySqlConnection(cs);
             con.Open();
-
             var stm = "SELECT * FROM products LEFT JOIN categories ON products.`category` = categories.`catid` LEFT JOIN attributes ON products.`atid` = attributes.`attrid`";
             var cmd = new MySqlCommand(stm, con);
 
             MySqlDataReader rdr;
-
             rdr = cmd.ExecuteReader();
-
-
 
             while (rdr.Read())
             {
-
                 product prod = new product()
                 {
                     recid = rdr.GetInt32(0),
-
                     name = rdr.GetString(1),
-
                     category = rdr.GetString(5),
-
                     size = rdr.GetString(7),
-
                     color = rdr.GetString(8),
-
                     price = rdr.GetString(9),
-
                     categoryname = rdr.GetString(6),
                 };
-
                 string jsonval = JsonConvert.SerializeObject(prod);
-                //string jsonval = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonval1);
                 Console.WriteLine(jsonval);
-
                 list.Add(prod);
-                //list.Append(jsonval);
-
                 Console.WriteLine("line 51");
-
             }
-
 
             Console.WriteLine("line 61");
             var output = JsonConvert.SerializeObject(list);
@@ -133,6 +114,42 @@ namespace restsharp.Controllers
             cmd.ExecuteNonQuery();
 
             return Ok(new { status = true, message = "successfully saved" });
+        }
+
+        //get from params
+        [HttpGet("{categoryid}")]
+        public string GetQuery(string categoryid)
+        {
+            string cs = @"server=localhost;userid=root;password=;database=testa";
+            using var con = new MySqlConnection(cs);
+            con.Open();
+            var stm = $"SELECT * FROM products LEFT JOIN categories ON products.`category` = categories.`catid` LEFT JOIN attributes ON products.`atid` = attributes.`attrid` WHERE products.category =" + '"' + categoryid + '"';
+            var cmd = new MySqlCommand(stm, con);
+
+            MySqlDataReader rdr;
+            rdr = cmd.ExecuteReader();
+            list.Clear();
+            while (rdr.Read())
+            {
+                product prod = new product()
+                {
+                    recid = rdr.GetInt32(0),
+                    name = rdr.GetString(1),
+                    category = rdr.GetString(5),
+                    size = rdr.GetString(7),
+                    color = rdr.GetString(8),
+                    price = rdr.GetString(9),
+                    categoryname = rdr.GetString(6),
+
+                };
+                string jsonval = JsonConvert.SerializeObject(prod);
+                Console.WriteLine(jsonval);
+                list.Add(prod);
+            }
+            var output = JsonConvert.SerializeObject(list);
+            var json = Newtonsoft.Json.JsonConvert.DeserializeObject(output);
+            con.Close();
+            return output;
         }
     }
 }

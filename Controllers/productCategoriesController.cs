@@ -84,10 +84,6 @@ namespace restsharp.Controllers
             return Ok(new { status = true, message = "successfully saved" });
         }
 
-        
-
-        
-
     }
 }
 
