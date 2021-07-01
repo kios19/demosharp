@@ -14,7 +14,7 @@ namespace restsharp
 
         public static void Main(string[] args)
         {
-            Console.WriteLine("started api");
+            Console.WriteLine("starting api");
             CreateHostBuilder(args).Build().Run();
         }
 

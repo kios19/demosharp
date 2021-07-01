@@ -52,7 +52,7 @@ namespace restsharp.Controllers
             Console.WriteLine("line 61");
             var output = JsonConvert.SerializeObject(list);
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject(output);
-
+            con.Close();
             return output;
         }
 
@@ -84,6 +84,7 @@ namespace restsharp.Controllers
 
                 cmd.CommandText = $"Insert INTO products (name,atid,  category) VALUES (" + '"' + name + '"' + ',' + '"' + atid + '"' + ',' + '"' + category + '"'  + ")";
                 cmd.ExecuteNonQuery();
+                con.Close();
             }
             catch (Exception ex)
             {
@@ -112,7 +113,7 @@ namespace restsharp.Controllers
 
             cmd.CommandText = $"UPDATE products set name=" +'"'+ name + '"' + "where id=" + '"' + category + '"';
             cmd.ExecuteNonQuery();
-
+            con.Close();
             return Ok(new { status = true, message = "successfully saved" });
         }
 

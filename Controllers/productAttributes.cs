@@ -39,19 +39,15 @@ namespace restsharp.Controllers
 
                     price = rdr.GetString(3),
 
-
                 };
                 string jsonval = JsonConvert.SerializeObject(prod);
                 Console.WriteLine(jsonval);
                 list.Add(prod);
 
             }
-
-
-            Console.WriteLine("line 61");
             var output = JsonConvert.SerializeObject(list);
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject(output);
-
+            con.Close();
             return output;
         }
 
@@ -62,8 +58,7 @@ namespace restsharp.Controllers
         public ActionResult CreatesProducts([FromForm] attributes prd)
         {
             Console.WriteLine(prd);
-            
-         
+                    
             string color = prd.color;
 
             string size = prd.size;
@@ -78,8 +73,6 @@ namespace restsharp.Controllers
             {
                 Console.WriteLine("vitu");
                 Console.WriteLine(attname);
-
-
                 using var con = new MySqlConnection(cs);
                 con.Open();
 
@@ -88,6 +81,7 @@ namespace restsharp.Controllers
 
                 cmd.CommandText = $"Insert INTO attributes (size ,color, price, attname ) VALUES (" + '"' + size + '"' + ',' + '"' + color + '"' + ',' + '"' + price + '"' +',' + '"' + attname + '"' + ")";
                 cmd.ExecuteNonQuery();
+                con.Close();
             }
             catch (Exception ex)
             {

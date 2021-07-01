@@ -22,44 +22,28 @@ namespace restsharp.Controllers
 
             using var con = new MySqlConnection(cs);
             con.Open();
-
             var stm = "SELECT * FROM categories";
             var cmd = new MySqlCommand(stm, con);
 
             MySqlDataReader rdr;
-
             rdr = cmd.ExecuteReader();
-
-
-
             while (rdr.Read())
             {
-
                 Category prod = new Category()
                 {
                     categoryid = rdr.GetString(0),
-
-                    categoryname = rdr.GetString(1),
-
-                   
+                    categoryname = rdr.GetString(1),                
                 };
 
                 string jsonval = JsonConvert.SerializeObject(prod);
-                //string jsonval = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonval1);
                 Console.WriteLine(jsonval);
-
                 list.Add(prod);
-                //list.Append(jsonval);
-
-                Console.WriteLine("line 51");
-
             }
-
 
             Console.WriteLine("line 61");
             var output = JsonConvert.SerializeObject(list);
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject(output);
-
+            con.Close();
             return output;
         }
 
@@ -81,6 +65,7 @@ namespace restsharp.Controllers
 
             cmd.CommandText = $"Insert INTO categories (category_name) VALUES ("+ '"' + name + '"' + ")";
             cmd.ExecuteNonQuery();
+            con.Close();
             return Ok(new { status = true, message = "successfully saved" });
         }
 

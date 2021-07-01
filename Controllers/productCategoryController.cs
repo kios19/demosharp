@@ -29,6 +29,7 @@ namespace restsharp.Controllers
 
             cmd.CommandText = $"Insert INTO categories (category_name) VALUES (" + '"' + name + '"' + ")";
             cmd.ExecuteNonQuery();
+            con.Close();
             return Ok(new { status = true, message = "successfully saved" });
         }
 
